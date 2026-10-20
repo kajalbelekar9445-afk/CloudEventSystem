@@ -1,0 +1,554 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>EventHub | Event Registration System</title>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: Arial, Helvetica, sans-serif;
+            background: #f4f7fc;
+            color: #172b4d;
+            line-height: 1.6;
+        }
+
+        header {
+            background: #102a56;
+            color: white;
+            padding: 18px 8%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+
+        .logo {
+            font-size: 27px;
+            font-weight: bold;
+        }
+
+        .logo span {
+            color: #58c4f6;
+        }
+
+        nav {
+            display: flex;
+            gap: 24px;
+            flex-wrap: wrap;
+        }
+
+        nav a {
+            color: white;
+            text-decoration: none;
+            font-size: 15px;
+            transition: 0.3s;
+        }
+
+        nav a:hover {
+            color: #58c4f6;
+        }
+
+        .hero {
+            min-height: 430px;
+            padding: 80px 8%;
+            display: flex;
+            align-items: center;
+            background: linear-gradient(120deg, #102a56, #1e5799);
+            color: white;
+        }
+
+        .hero-content {
+            max-width: 750px;
+        }
+
+        .hero h1 {
+            font-size: clamp(35px, 5vw, 56px);
+            line-height: 1.2;
+            margin-bottom: 22px;
+        }
+
+        .hero h1 span {
+            color: #58c4f6;
+        }
+
+        .hero p {
+            font-size: 17px;
+            color: #e0eafa;
+            margin-bottom: 30px;
+            max-width: 650px;
+        }
+
+        .btn {
+            display: inline-block;
+            padding: 12px 23px;
+            background: #58c4f6;
+            color: #102a56;
+            border-radius: 7px;
+            text-decoration: none;
+            font-weight: bold;
+            border: none;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        .btn:hover {
+            background: #dff5ff;
+            transform: translateY(-2px);
+        }
+
+        section {
+            padding: 65px 8%;
+        }
+
+        .section-title {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .section-title h2 {
+            font-size: 32px;
+            color: #102a56;
+            margin-bottom: 10px;
+        }
+
+        .section-title p {
+            color: #64748b;
+        }
+
+        /* Six Event Cards */
+
+        .event-grid {
+            display: grid;
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+            gap: 25px;
+        }
+
+        .event-card {
+            background: white;
+            padding: 28px;
+            border-radius: 13px;
+            border: 1px solid #e2e8f0;
+            box-shadow: 0 5px 18px rgba(16, 42, 86, 0.07);
+            transition: 0.3s;
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+        }
+
+        .event-card:hover {
+            transform: translateY(-6px);
+            box-shadow: 0 12px 28px rgba(16, 42, 86, 0.14);
+        }
+
+        .event-icon {
+            width: 65px;
+            height: 65px;
+            background: #eaf5ff;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 34px;
+            margin-bottom: 18px;
+        }
+
+        .event-card h3 {
+            color: #102a56;
+            font-size: 20px;
+            margin-bottom: 12px;
+        }
+
+        .event-card p {
+            color: #64748b;
+            font-size: 14px;
+            margin-bottom: 22px;
+            flex-grow: 1;
+        }
+
+        .register-section {
+            background: #eaf1fb;
+        }
+
+        .form-container {
+            max-width: 650px;
+            margin: auto;
+            background: white;
+            padding: 35px;
+            border-radius: 14px;
+            box-shadow: 0 8px 28px rgba(16, 42, 86, 0.09);
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: bold;
+            color: #102a56;
+        }
+
+        .form-group input,
+        .form-group select {
+            width: 100%;
+            padding: 13px;
+            border: 1px solid #cbd5e1;
+            border-radius: 7px;
+            font-size: 15px;
+            background: white;
+        }
+
+        .form-group input:focus,
+        .form-group select:focus {
+            outline: 2px solid #58c4f6;
+            border-color: #1e5799;
+        }
+
+        .submit-btn {
+            width: 100%;
+            font-size: 16px;
+        }
+
+        .about-box {
+            max-width: 850px;
+            margin: auto;
+            text-align: center;
+        }
+
+        .about-box p {
+            color: #64748b;
+            font-size: 16px;
+            margin-bottom: 18px;
+        }
+
+        footer {
+            background: #102a56;
+            color: #dbeafe;
+            padding: 28px 8%;
+            text-align: center;
+        }
+
+        footer p {
+            font-size: 14px;
+            margin: 4px 0;
+        }
+
+        @media (max-width: 900px) {
+            .event-grid {
+                grid-template-columns: repeat(2, minmax(0, 1fr));
+            }
+        }
+
+        @media (max-width: 600px) {
+            header {
+                justify-content: center;
+                text-align: center;
+            }
+
+            nav {
+                justify-content: center;
+                gap: 15px;
+            }
+
+            .hero {
+                padding: 60px 7%;
+            }
+
+            section {
+                padding: 45px 7%;
+            }
+
+            .event-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .form-container {
+                padding: 23px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- Navigation Bar -->
+
+    <header>
+        <div class="logo">Event<span>Hub.</span></div>
+
+        <nav>
+            <a href="#home">Home</a>
+            <a href="#events">Events</a>
+            <a href="#register">Register</a>
+            <a href="#about">About</a>
+            <a href="/admin">Admin</a>
+        </nav>
+    </header>
+
+    <!-- Home Section -->
+
+    <section class="hero" id="home">
+        <div class="hero-content">
+
+            <h1>
+                Discover Events.<br>
+                <span>Build Your Future.</span>
+            </h1>
+
+            <p>
+                Welcome to EventHub, your platform for discovering
+                exciting college events, participating in technical
+                competitions and learning new skills through workshops.
+                Explore events and register online with ease.
+            </p>
+
+            <a href="#events" class="btn">Explore Events &rarr;</a>
+
+        </div>
+    </section>
+
+    <!-- Events Section -->
+
+    <section id="events">
+
+        <div class="section-title">
+            <h2>Explore Our Events</h2>
+            <p>Discover opportunities to learn, innovate and grow.</p>
+        </div>
+
+        <div class="event-grid">
+
+            <!-- Event 1 -->
+
+            <div class="event-card">
+                <div class="event-icon">💻</div>
+
+                <h3>Technical Fest</h3>
+
+                <p>
+                    Explore new technologies, showcase your technical
+                    knowledge and discover innovative ideas.
+                </p>
+
+                <a href="#register" class="btn">Register Now</a>
+            </div>
+
+            <!-- Event 2 -->
+
+            <div class="event-card">
+                <div class="event-icon">🚀</div>
+
+                <h3>Coding Competition</h3>
+
+                <p>
+                    Test your programming skills, solve coding challenges
+                    and improve your problem-solving abilities.
+                </p>
+
+                <a href="#register" class="btn">Register Now</a>
+            </div>
+
+            <!-- Event 3 -->
+
+            <div class="event-card">
+                <div class="event-icon">🎓</div>
+
+                <h3>Workshop</h3>
+
+                <p>
+                    Learn practical skills, explore new concepts and
+                    gain knowledge through interactive learning sessions.
+                </p>
+
+                <a href="#register" class="btn">Register Now</a>
+            </div>
+
+            <!-- Event 4 -->
+
+            <div class="event-card">
+                <div class="event-icon">🤖</div>
+
+                <h3>AI & Robotics</h3>
+
+                <p>
+                    Discover artificial intelligence, robotics and
+                    emerging technologies shaping the future.
+                </p>
+
+                <a href="#register" class="btn">Register Now</a>
+            </div>
+
+            <!-- Event 5 -->
+
+            <div class="event-card">
+                <div class="event-icon">🌐</div>
+
+                <h3>Web Development</h3>
+
+                <p>
+                    Explore modern web technologies and learn how
+                    websites and web applications are developed.
+                </p>
+
+                <a href="#register" class="btn">Register Now</a>
+            </div>
+
+            <!-- Event 6 -->
+
+            <div class="event-card">
+                <div class="event-icon">📊</div>
+
+                <h3>Project Exhibition</h3>
+
+                <p>
+                    Present creative projects, share innovative ideas
+                    and demonstrate your technical skills.
+                </p>
+
+                <a href="#register" class="btn">Register Now</a>
+            </div>
+
+        </div>
+    </section>
+
+    <!-- Registration Section -->
+
+    <section class="register-section" id="register">
+
+        <div class="section-title">
+            <h2>Event Registration</h2>
+            <p>Fill in your details to register for your preferred event.</p>
+        </div>
+
+        <div class="form-container">
+
+            <form action="/register" method="POST">
+
+                <div class="form-group">
+                    <label for="name">Full Name</label>
+
+                    <input
+                        type="text"
+                        id="name"
+                        name="name"
+                        placeholder="Enter your full name"
+                        required>
+                </div>
+
+                <div class="form-group">
+                    <label for="email">Email Address</label>
+
+                    <input
+                        type="email"
+                        id="email"
+                        name="email"
+                        placeholder="Enter your email address"
+                        required>
+                </div>
+
+                <div class="form-group">
+    <label for="department">Select Department</label>
+
+    <select id="department" name="department" required>
+        <option value="">-- Choose Your Department --</option>
+        <option value="Computer Science">Data Science</option>
+        <option value="Information Technology">Information Technology</option>
+        <option value="Computer Engineering">Computer Engineering</option>
+        <option value="Electronics">Electronics</option>
+        <option value="Mechanical Engineering">Mechanical Engineering</option>
+        <option value="Civil Engineering">Civil Engineering</option>
+        <option value="Artificial Intelligence">Artificial Intelligence</option>
+    </select>
+</div>
+
+                <div class="form-group">
+                    <label for="event">Select Event</label>
+
+                    <select id="event" name="event" required>
+                        <option value="">-- Choose an Event --</option>
+
+                        <option value="Technical Fest">
+                            Technical Fest
+                        </option>
+
+                        <option value="Coding Competition">
+                            Coding Competition
+                        </option>
+
+                        <option value="Workshop">
+                            Workshop
+                        </option>
+
+                        <option value="AI & Robotics">
+                            AI & Robotics
+                        </option>
+
+                        <option value="Web Development">
+                            Web Development
+                        </option>
+
+                        <option value="Project Exhibition">
+                            Project Exhibition
+                        </option>
+                    </select>
+                </div>
+
+                <button type="submit" class="btn submit-btn">
+                    Submit Registration
+                </button>
+
+            </form>
+        </div>
+    </section>
+
+    <!-- About Section -->
+
+    <section id="about">
+
+        <div class="about-box">
+
+            <div class="section-title">
+                <h2>About EventHub</h2>
+            </div>
+
+            <p>
+                EventHub is a cloud-based event registration system
+                designed to simplify college event management.
+                Students can explore available events and submit
+                their registration details through a user-friendly interface.
+            </p>
+
+            <p>
+                The system helps organize student registrations and
+                enables administrators to view submitted information
+                through the admin dashboard.
+            </p>
+
+            <a href="#register" class="btn">Join an Event</a>
+
+        </div>
+    </section>
+
+    <!-- Footer -->
+
+    <footer>
+        <p>
+            &copy; 2026 EventHub | Cloud-Based Event Registration System
+        </p>
+
+        <p>Designed for a smarter event registration experience.</p>
+    </footer>
+
+</body>
+</html>
